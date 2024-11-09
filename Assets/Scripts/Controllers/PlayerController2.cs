@@ -12,7 +12,7 @@ public class PlayerController2 : MonoBehaviour
     [Header("Character Controller")]
     private CharacterController _controller;
 
-    private GhostTactics _inputs;
+    public GhostTactics _inputs;
 
     [Header("Movement")] private Vector2 _move;
     [SerializeField] private float _speed = 8.0f;
@@ -52,6 +52,7 @@ public class PlayerController2 : MonoBehaviour
     
 
     //[Header("Projectile Stuff")]
+    public bool isFiring = false;
 
     private void Awake()
     {
@@ -82,7 +83,9 @@ public class PlayerController2 : MonoBehaviour
         _targetCameraRotation = _camera.transform.localRotation;
         _targetGunPosition = _currentGun.transform.localPosition;
         
-       
+        //Weapon Bindings
+        _inputs.Player.Fire.performed += ctx => isFiring = true;
+        _inputs.Player.Fire.canceled += ctx => isFiring = false;
     }
 
     void Update()
@@ -188,6 +191,7 @@ public class PlayerController2 : MonoBehaviour
     {
         _velocity.y = (_jumpHeight);
     }
+    
     
     //Mouse state handlers
     private void DisableInput()
