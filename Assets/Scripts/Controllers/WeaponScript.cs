@@ -16,11 +16,18 @@ public class WeaponScript : MonoBehaviour
     [SerializeField] private GameObject _projectileSpawnPoint;
     private bool _isShooting = false;
     
+    // Sound Effects
+    [Header("Sound Effects")]
+    [SerializeField] private AudioClip _fireSound;
+    [SerializeField] private AudioClip _reloadSound; // Not implemented yet
+    private AudioSource _audioSource;
+    
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         GameObject playerObject = GameObject.Find(_playerControllerName);
+        _audioSource = GetComponent<AudioSource>();
         if (playerObject != null)
         {
             _playerController = playerObject.GetComponent<PlayerController2>();
@@ -60,6 +67,12 @@ public class WeaponScript : MonoBehaviour
                 rb.linearVelocity = _projectileSpawnPoint.transform.forward * _projectileSpeed;
             }
             Destroy(projectile, _projectileLifeTime);
+            
+            // Play sound effect
+            if (_fireSound != null)
+            {
+                _audioSource.PlayOneShot(_fireSound);
+            }
         }
         else
         {

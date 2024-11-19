@@ -2662,10 +2662,6 @@ PrefabInstance:
       propertyPath: _scoreText
       value: 
       objectReference: {fileID: 1765436026}
-    - target: {fileID: 0}
-      propertyPath: _scoreText
-      value: 
-      objectReference: {fileID: 1765436026}
     - target: {fileID: 6534780876331991240, guid: 9bb1672ab8451d3d3b5e1ebdc30e8add, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -4712,6 +4708,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3005993864513319073, guid: a4152d1f596f75079a5cf059b890ccf0, type: 3}
+      propertyPath: m_Volume
+      value: 0.272
+      objectReference: {fileID: 0}
+    - target: {fileID: 5806327461996130973, guid: a4152d1f596f75079a5cf059b890ccf0, type: 3}
+      propertyPath: _musicClips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5806327461996130973, guid: a4152d1f596f75079a5cf059b890ccf0, type: 3}
+      propertyPath: '_musicClips.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 3dbfdde588c25da4c8aeed7de293a341, type: 3}
     - target: {fileID: 9080454081230392727, guid: a4152d1f596f75079a5cf059b890ccf0, type: 3}
       propertyPath: m_Name
       value: Player
