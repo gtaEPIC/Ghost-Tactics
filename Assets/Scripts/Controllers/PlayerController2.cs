@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Scripting.APIUpdating;
 using UnityEngine.Serialization;
 using GhostTacticsNS;
+using TMPro.EditorUtilities;
 
 public class PlayerController2 : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class PlayerController2 : MonoBehaviour
 
     [Header("Movement")] private Vector2 _move;
     [SerializeField] private float _speed = 8.0f;
+    private float _speedOld;
     [SerializeField] private float _acceleration = 1.0f;
     [SerializeField] private float _deceleration = 1.0f;
     //[SerializeField] private float _strafeModifier = 0.5f;
@@ -23,6 +25,7 @@ public class PlayerController2 : MonoBehaviour
     [SerializeField] private float _gravity = 9.81f;
     [SerializeField] private float _jumpHeight = 6.0f;
     [ShowOnly] [SerializeField] private Vector3 _velocity = new Vector3(0, 0, 0);
+    
 
     [Header("Mouse Settings")]
     private Vector2 _mouse;
@@ -105,6 +108,7 @@ public class PlayerController2 : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        _speedOld = _speed;
     }
 
     //Mouse input handler
@@ -223,4 +227,19 @@ public class PlayerController2 : MonoBehaviour
             DisableInput();
         }
     }
+    
+    //Reserved Area for external interactions
+    
+    public void ReduceSpeedByHalf()
+    {
+        _speed *= 0.5f;
+    }
+    
+    public void ResetSpeed()
+    {
+        {
+            _speed = _speedOld;
+        }
+    }
+    
 }

@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class MusicController : MonoBehaviour
@@ -6,9 +7,15 @@ public class MusicController : MonoBehaviour
     [SerializeField] private AudioClip[] _musicClips;
     private AudioSource _audioSource;
 
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (_musicClips == null || _musicClips.Length == 0)
+        {
+            enabled = false;
+            return;
+        }
         _audioSource = GetComponent<AudioSource>();
     }
     
