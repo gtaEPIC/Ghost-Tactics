@@ -4,28 +4,36 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] private float _destroyDelay = 0.25f;
     [SerializeField] private int _damage = 5;
+    [SerializeField] private Vector3 _force = new Vector3(0, 0, 10);
+
     private void Start()
     {
         Destroy(gameObject, _destroyDelay);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        Target target = collision.gameObject.GetComponent<Target>();
+        Target target = other.gameObject.GetComponent<Target>();
         if (target != null)
         {
             target.DestroyTarget();
         }
-        Destroy(gameObject);
 
-        if (collision.gameObject.CompareTag("Enemy"))
+        Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+        if (rb != null)
         {
-            EnemyHealthController healthController = collision.gameObject.GetComponent<EnemyHealthController>();
+            rb.AddForce(_force, ForceMode.Impulse);
+        }
+
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            EnemyHealthController healthController = other.gameObject.GetComponent<EnemyHealthController>();
             if (healthController != null)
             {
                 healthController.TakeDamage(_damage);
             }
-            Destroy(this.gameObject);
         }
+
+        Destroy(gameObject);
     }
 }

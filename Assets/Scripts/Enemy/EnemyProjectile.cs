@@ -14,7 +14,7 @@ public class EnemyProjectile : MonoBehaviour
         StartCoroutine(DestroyAfterDelay());
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {

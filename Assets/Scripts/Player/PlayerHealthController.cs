@@ -1,10 +1,11 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class PlayerHealthController : MonoBehaviour
 {
-    [Header("Health")] 
+    [Header("Health")]
     [SerializeField] private int maxHealth;
     public int MaxHealth => maxHealth;
     [SerializeField] private int currentHealth;
@@ -23,9 +24,13 @@ public class PlayerHealthController : MonoBehaviour
     private bool isDead = false;
     public bool IsDead => isDead;
 
-    [Header("Camera Shake")] 
-    [SerializeField] private float intensity = 5f;
+    [Header("Camera Shake")]
+    [SerializeField] private float intensity = 0.01f;
     [SerializeField] private float time = 0.25f;
+    [SerializeField] private Camera playerCamera;
+
+    //[Header("Player Controller")]
+    private PlayerController2 playerController;
 
     public event Action<int, int> OnHealthChanged;
     public event Action<int, int> OnArmorChanged;
@@ -37,11 +42,12 @@ public class PlayerHealthController : MonoBehaviour
 
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
         OnArmorChanged?.Invoke(currentArmor, maxArmor);
+        
+        playerController = GetComponent<PlayerController2>();
     }
 
     void Update()
     {
-        
         if (Input.GetKeyDown(KeyCode.M))
         {
             TakeDamage(10);
@@ -60,9 +66,9 @@ public class PlayerHealthController : MonoBehaviour
     {
         if (CanTakeDamage)
         {
+            StartCoroutine(ShakeCamera(damageAmount));
             if (currentArmor > 0)
             {
-                // Armor absorbs the damage first
                 int damageToArmor = Mathf.Min(damageAmount, currentArmor);
                 currentArmor -= damageToArmor;
                 damageAmount -= damageToArmor;
@@ -71,7 +77,6 @@ public class PlayerHealthController : MonoBehaviour
 
             if (damageAmount > 0)
             {
-                // Remaining damage is applied to health
                 currentHealth -= damageAmount;
                 currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
                 OnHealthChanged?.Invoke(currentHealth, maxHealth);
@@ -79,8 +84,16 @@ public class PlayerHealthController : MonoBehaviour
                 if (currentHealth <= 0 && !isDead)
                 {
                     isDead = true;
-                    // Handle player death logic here
                     Debug.Log("Player has died.");
+                }
+
+                
+
+                // Reduce player's speed by half
+                if (playerController != null)
+                {
+                    playerController.ReduceSpeedByHalf();
+                    StartCoroutine(ResetSpeedAfterDelay());
                 }
             }
         }
@@ -88,6 +101,35 @@ public class PlayerHealthController : MonoBehaviour
         {
             Debug.Log($"{gameObject.name} is shielded and cannot take damage.");
         }
+    }
+
+    private IEnumerator ResetSpeedAfterDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        if (playerController != null)
+        {
+            playerController.ResetSpeed();
+        }
+    }
+
+    private IEnumerator ShakeCamera(float damageAmount)
+    {
+        Vector3 originalPosition = playerCamera.transform.localPosition;
+        Quaternion originalRotation = playerCamera.transform.localRotation;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < time)
+        {
+            float x = UnityEngine.Random.Range(-1f, 1f) * (intensity * damageAmount);
+            float y = UnityEngine.Random.Range(-1f, 1f) * (intensity * damageAmount);
+            float z = UnityEngine.Random.Range(-1f, 1f) * (intensity * damageAmount);
+            
+            playerCamera.transform.localRotation = originalRotation * Quaternion.Euler(x, y, z);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        playerCamera.transform.localRotation = originalRotation;
     }
 
     public void ResetHealth()
