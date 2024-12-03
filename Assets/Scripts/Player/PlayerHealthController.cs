@@ -85,6 +85,7 @@ public class PlayerHealthController : MonoBehaviour
                 {
                     isDead = true;
                     Debug.Log("Player has died.");
+                    SceneManager.LoadScene("LoseScreen");
                 }
 
                 
