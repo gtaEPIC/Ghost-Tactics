@@ -1,12 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Scripting.APIUpdating;
-using UnityEngine.Serialization;
 using GhostTacticsNS;
-using TMPro.EditorUtilities;
 
 public class PlayerController2 : MonoBehaviour
 {
@@ -114,26 +108,26 @@ public class PlayerController2 : MonoBehaviour
     //Mouse input handler
     private void HandleMouseInput()
     {
-        Vector2 _mouseDelta = _mouse * Time.smoothDeltaTime;
+        Vector2 _mouseDelta = _mouse * Time.deltaTime;
         _xRotation -= _mouseDelta.y * mouseSensY;
         _yRotation += _mouseDelta.x * mouseSensX;
         _xRotation = Mathf.Clamp(_xRotation, -90f, 90f);
 
-        if (Mathf.Abs(_move.x) > 0.1f || Mathf.Abs(_velocity.y) > 0.1f)
-        {
-            _cameraOffset.x = Mathf.MoveTowards(_cameraOffset.x, _cameraSnapCapX * _move.x, _cameraVelMod * Time.smoothDeltaTime);
-            _cameraOffset.y = Mathf.MoveTowards(_cameraOffset.y, _velocity.y, _cameraVelMod * Time.smoothDeltaTime);
-        }
-        else
-        {
-            _cameraOffset.x = Mathf.MoveTowards(_cameraOffset.x, 0, _cameraReturnSpeed / Time.smoothDeltaTime);
-            _cameraOffset.y = Mathf.MoveTowards(_cameraOffset.y, 0, _cameraReturnSpeed / Time.smoothDeltaTime);
-        }
+        // if (Mathf.Abs(_move.x) > 0.1f || Mathf.Abs(_velocity.y) > 0.1f)
+        // {
+        //     _cameraOffset.x = Mathf.MoveTowards(_cameraOffset.x, _cameraSnapCapX * _move.x, _cameraVelMod * Time.deltaTime);
+        //     _cameraOffset.y = Mathf.MoveTowards(_cameraOffset.y, _velocity.y, _cameraVelMod * Time.deltaTime);
+        // }
+        // else
+        // {
+        //     _cameraOffset.x = Mathf.MoveTowards(_cameraOffset.x, 0, _cameraReturnSpeed * Time.deltaTime);
+        //     _cameraOffset.y = Mathf.MoveTowards(_cameraOffset.y, 0, _cameraReturnSpeed * Time.deltaTime);
+        // }
         _cameraOffset.x = Mathf.Clamp(_cameraOffset.x, -_cameraSnapCapX * 2, _cameraSnapCapX * 2);
         _cameraOffset.y = Mathf.Clamp(_cameraOffset.y, -_cameraSnapCapY, _cameraSnapCapY * 2);
 
         _yGunRotation = Mathf.Clamp(_xRotation, -20f, 40f);
-        
+    
         Quaternion mouseRotation = Quaternion.Euler(_xRotation + _cameraOffset.y, _cameraOffset.x, 0f);
         _camera.transform.localRotation = Quaternion.Slerp(_camera.transform.localRotation, mouseRotation, _leanSpeed * Time.deltaTime);
         _controller.transform.rotation = Quaternion.Euler(0f, _yRotation - _cameraOffset.x, 0f);
