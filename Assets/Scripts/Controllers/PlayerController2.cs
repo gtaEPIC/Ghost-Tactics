@@ -104,6 +104,13 @@ public class PlayerController2 : MonoBehaviour
         Cursor.visible = false;
         _speedOld = _speed;
     }
+    
+    private void OnDisable()
+    {
+        DisableInput();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
 
     //Mouse input handler
     private void HandleMouseInput()
