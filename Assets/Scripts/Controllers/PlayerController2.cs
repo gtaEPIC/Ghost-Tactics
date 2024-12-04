@@ -111,6 +111,13 @@ public class PlayerController2 : MonoBehaviour
         _speedOld = _speed;
     }
     
+    private void OnDisable()
+    {
+        DisableInput();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+    
     
 private void HandleMouseInput()
 {
@@ -123,6 +130,7 @@ private void HandleMouseInput()
     _camera.transform.localRotation = Quaternion.Slerp(_camera.transform.localRotation, cameraRotation, _leanSpeed * Time.deltaTime);
     
     _controller.transform.rotation = Quaternion.Euler(0f, _yRotation, 0f);
+
 
     Vector3 targetGunPosition = new Vector3(_currentGun.transform.localPosition.x, ((_camera.transform.localPosition.y -0.5f) - _currentGun.transform.localPosition.y), _camera.transform.localPosition.z);
     
