@@ -81,7 +81,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3974383599237742136}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -246,7 +246,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a82ecc7f0984c2942a95832f27bb61cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _musicClips: []
+  _musicClips:
+  - {fileID: 8300000, guid: 7ec6a91bb87f17a44b3cc619d99e7f92, type: 3}
 --- !u!82 &3005993864513319073
 AudioSource:
   m_ObjectHideFlags: 0
@@ -260,7 +261,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.179
+  m_Volume: 0.101
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -504,16 +505,20 @@ MonoBehaviour:
   _gravity: 9.81
   _jumpHeight: 5
   _velocity: {x: 0, y: 0, z: 0}
-  mouseSensX: 30
-  mouseSensY: 30
-  _cameraVelMod: 40
-  _cameraReturnSpeed: 70
-  _cameraSnapCapX: 10
-  _cameraSnapCapY: 10
+  mouseSensX: 15
+  mouseSensY: 15
   _leanAngle: 15
   _leanDistance: 1
   _leanSpeed: 5
   _currentGun: {fileID: 3974383599237742136}
+  _initialGunYaw: 0
+  _gunYawModifier: 5
+  _yawClampMin: 50
+  _yawClampMax: 30
+  _gunReturnSpeed: 5
+  _slerpSpeedX: 5
+  _slerpSpeedY: 5
+  _returnSpeed: 0.3
   isFiring: 0
 --- !u!114 &1338852438126232024
 MonoBehaviour:
@@ -564,31 +569,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 402374614798109333, guid: e347d201f922d6ba4a674b1da083c187, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.6813083
+      value: 4.668052
       objectReference: {fileID: 0}
     - target: {fileID: 402374614798109333, guid: e347d201f922d6ba4a674b1da083c187, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.296384
+      value: 3.269999
       objectReference: {fileID: 0}
     - target: {fileID: 402374614798109333, guid: e347d201f922d6ba4a674b1da083c187, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 12.390852
+      value: 7.677269
       objectReference: {fileID: 0}
     - target: {fileID: 402374614798109333, guid: e347d201f922d6ba4a674b1da083c187, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9965423
+      value: 0.9915512
       objectReference: {fileID: 0}
     - target: {fileID: 402374614798109333, guid: e347d201f922d6ba4a674b1da083c187, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.079528235
+      value: -0.077401295
       objectReference: {fileID: 0}
     - target: {fileID: 402374614798109333, guid: e347d201f922d6ba4a674b1da083c187, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.012467361
+      value: 0.10038966
       objectReference: {fileID: 0}
     - target: {fileID: 402374614798109333, guid: e347d201f922d6ba4a674b1da083c187, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.02057772
+      value: 0.02751785
       objectReference: {fileID: 0}
     - target: {fileID: 402374614798109333, guid: e347d201f922d6ba4a674b1da083c187, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -596,7 +601,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 402374614798109333, guid: e347d201f922d6ba4a674b1da083c187, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 1.252
+      value: 11.381
       objectReference: {fileID: 0}
     - target: {fileID: 402374614798109333, guid: e347d201f922d6ba4a674b1da083c187, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

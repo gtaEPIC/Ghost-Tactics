@@ -28,14 +28,9 @@ public class PlayerController2 : MonoBehaviour
     [SerializeField] public float mouseSensY = 30f;
     private float _xRotation = 0f;
     private float _yRotation = 0f; 
-    [SerializeField] public float _cameraVelMod = 20.0f;
-    [SerializeField] public float _cameraReturnSpeed = 0.001f;
-    [SerializeField]public int _cameraSnapCapX = 50;
-    [SerializeField] public int _cameraSnapCapY = 50;
-    private Vector2 _cameraDesync = new Vector2(0f, 0f);    
     private Vector2 _cameraOffset = new Vector2(0f, 0f);
-    private Vector2 _cameraPrev = new Vector2(0f, 0f);
-    private float _yGunRotation = 0.0f;
+
+
     
     [Header("Lean Settings")]
     private Vector2 _lean;
@@ -47,6 +42,15 @@ public class PlayerController2 : MonoBehaviour
     private Vector3 _targetGunPosition;
     [SerializeField] private GameObject _currentGun = null;
     
+    [Header("Gun Movement Settings")]
+    [SerializeField] private float _initialGunYaw = 0f;
+    [SerializeField] private float _gunYawModifier = 5f;
+    [SerializeField] private float _yawClampMin = 30f;
+    [SerializeField] private float _yawClampMax = 30f;
+    [SerializeField] private float _gunReturnSpeed = 5f;
+    [SerializeField] private float _slerpSpeedX = 5f;
+    [SerializeField] private float _slerpSpeedY = 5f;
+    [SerializeField] private float _returnSpeed = 5f;
 
     //[Header("Projectile Stuff")]
     public bool isFiring = false;
@@ -83,6 +87,8 @@ public class PlayerController2 : MonoBehaviour
         //Weapon Bindings
         _inputs.Player.Fire.performed += ctx => isFiring = true;
         _inputs.Player.Fire.canceled += ctx => isFiring = false;
+
+        _yawClampMin = Mathf.Abs(_yawClampMin);
     }
 
     void Update()
@@ -104,35 +110,53 @@ public class PlayerController2 : MonoBehaviour
         Cursor.visible = false;
         _speedOld = _speed;
     }
-
-    //Mouse input handler
-    private void HandleMouseInput()
-    {
-        Vector2 _mouseDelta = _mouse * Time.deltaTime;
-        _xRotation -= _mouseDelta.y * mouseSensY;
-        _yRotation += _mouseDelta.x * mouseSensX;
-        _xRotation = Mathf.Clamp(_xRotation, -90f, 90f);
-
-        // if (Mathf.Abs(_move.x) > 0.1f || Mathf.Abs(_velocity.y) > 0.1f)
-        // {
-        //     _cameraOffset.x = Mathf.MoveTowards(_cameraOffset.x, _cameraSnapCapX * _move.x, _cameraVelMod * Time.deltaTime);
-        //     _cameraOffset.y = Mathf.MoveTowards(_cameraOffset.y, _velocity.y, _cameraVelMod * Time.deltaTime);
-        // }
-        // else
-        // {
-        //     _cameraOffset.x = Mathf.MoveTowards(_cameraOffset.x, 0, _cameraReturnSpeed * Time.deltaTime);
-        //     _cameraOffset.y = Mathf.MoveTowards(_cameraOffset.y, 0, _cameraReturnSpeed * Time.deltaTime);
-        // }
-        _cameraOffset.x = Mathf.Clamp(_cameraOffset.x, -_cameraSnapCapX * 2, _cameraSnapCapX * 2);
-        _cameraOffset.y = Mathf.Clamp(_cameraOffset.y, -_cameraSnapCapY, _cameraSnapCapY * 2);
-
-        _yGunRotation = Mathf.Clamp(_xRotation, -20f, 40f);
     
-        Quaternion mouseRotation = Quaternion.Euler(_xRotation + _cameraOffset.y, _cameraOffset.x, 0f);
-        _camera.transform.localRotation = Quaternion.Slerp(_camera.transform.localRotation, mouseRotation, _leanSpeed * Time.deltaTime);
-        _controller.transform.rotation = Quaternion.Euler(0f, _yRotation - _cameraOffset.x, 0f);
-        _currentGun.transform.rotation = Quaternion.Euler(_yGunRotation, _yRotation, 0f);
+    
+private void HandleMouseInput()
+{
+    Vector2 _mouseDelta = _mouse * Time.deltaTime;
+    _xRotation -= _mouseDelta.y * mouseSensY; 
+    _yRotation += _mouseDelta.x * mouseSensX; 
+    _xRotation = Mathf.Clamp(_xRotation, -90f, 90f); 
+    
+    Quaternion cameraRotation = Quaternion.Euler(_xRotation, 0f, 0f);
+    _camera.transform.localRotation = Quaternion.Slerp(_camera.transform.localRotation, cameraRotation, _leanSpeed * Time.deltaTime);
+    
+    _controller.transform.rotation = Quaternion.Euler(0f, _yRotation, 0f);
+
+    Vector3 targetGunPosition = new Vector3(_currentGun.transform.localPosition.x, ((_camera.transform.localPosition.y -0.5f) - _currentGun.transform.localPosition.y), _camera.transform.localPosition.z);
+    
+    if (_xRotation < 10f) 
+    {
+        float upwardShift = Mathf.Abs(_xRotation / 90f) * 1.3f; 
+        targetGunPosition += Vector3.up * upwardShift; 
     }
+    
+    _currentGun.transform.localPosition = Vector3.Slerp(_currentGun.transform.localPosition, targetGunPosition, _leanSpeed * Time.deltaTime);
+    
+    AdjustGunRotation(cameraRotation);
+}
+
+private void AdjustGunRotation(Quaternion cameraRotation)
+{
+    if (_initialGunYaw == 0f)
+    {
+        _initialGunYaw = _currentGun.transform.localRotation.eulerAngles.y;
+    }
+    _gunYawModifier += _mouse.x * mouseSensX * Time.deltaTime;
+    _gunYawModifier = Mathf.Clamp(_gunYawModifier, -_yawClampMin, _yawClampMax); 
+    
+    _gunYawModifier = Mathf.Lerp(_gunYawModifier, 0f, Time.deltaTime * _gunReturnSpeed);
+    float targetGunYaw = _initialGunYaw + _gunYawModifier;
+    
+    Quaternion targetGunRotation = Quaternion.Euler(_xRotation, targetGunYaw, 0f);
+    
+    _currentGun.transform.localRotation = Quaternion.Slerp(
+        _currentGun.transform.localRotation,
+        targetGunRotation,
+        _leanSpeed * Time.deltaTime
+    );
+}
 
     //Character movement handler
     private void MovementHandler()
@@ -150,21 +174,28 @@ public class PlayerController2 : MonoBehaviour
                 _velocity.x -= Mathf.MoveTowards(_velocity.x, 0, _deceleration * Time.deltaTime);
                 _velocity.z -= Mathf.MoveTowards(_velocity.z, 0, _deceleration * Time.deltaTime);
             }
-            _controller.Move(move * speedmodifier * Time.deltaTime);
+            _controller.Move(move * (speedmodifier * Time.deltaTime));
     }
     
     private void HandleLeanInput()
     {
         float leanAngle = -_lean.x * _leanAngle;
         float leanDistance = _lean.x * _leanDistance;
-        
+
         _targetCameraRotation = Quaternion.Euler(_xRotation + _cameraOffset.y, _cameraOffset.x, leanAngle);
         _targetCameraPosition = new Vector3(leanDistance, _camera.transform.localPosition.y, _camera.transform.localPosition.z);
         _targetGunPosition = new Vector3(leanDistance, _currentGun.transform.localPosition.y, _currentGun.transform.localPosition.z);
-        
+
         _camera.transform.localRotation = Quaternion.Slerp(_camera.transform.localRotation, _targetCameraRotation, _leanSpeed * Time.deltaTime);
         _camera.transform.localPosition = Vector3.Lerp(_camera.transform.localPosition, _targetCameraPosition, _leanSpeed * Time.deltaTime);
-        _currentGun.transform.localPosition = Vector3.Lerp(_currentGun.transform.localPosition, _targetGunPosition, _leanSpeed * Time.deltaTime);
+
+        // Shift the gun left only when leaning left
+        Vector3 gunShift = Vector3.zero;
+        if (_lean.x < 0)
+        {
+            gunShift = Vector3.left * 0.7f; // Adjust the value as needed
+        }
+        _currentGun.transform.localPosition = Vector3.Lerp(_currentGun.transform.localPosition, _targetGunPosition + gunShift, _leanSpeed * Time.deltaTime);
     }
     
     //Character physics handler
