@@ -9,7 +9,7 @@ public class Sight: Sense
     private Transform playerTransform;
     private Vector3 rayDirection;
 
-    [ReadOnly] public GameObject detected { get; private set; }
+    [ShowOnly] public GameObject detected { get; private set; }
         
     protected override void Initialize()
     {

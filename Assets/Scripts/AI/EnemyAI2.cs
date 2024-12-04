@@ -21,30 +21,30 @@ public class EnemyAI2 : MonoBehaviour
     
     // Patrolling variables
     [Header("Patrolling Variables")]
-    [ReadOnly, SerializeField] private Vector3 walkPoint;
+    [ShowOnly, SerializeField] private Vector3 walkPoint;
     [SerializeField] private float walkPointRange = 10f;
     
     // Attacking variables
     [Header("Attacking Variables")]
     [SerializeField] private float attackCooldown = 2f;
-    [ReadOnly, SerializeField] private float currentCooldown;
+    [ShowOnly, SerializeField] private float currentCooldown;
     [SerializeField] private float attackRange = 10f;
     [SerializeField] private float attackDistance = 5f;
     public GameObject projectile;
     
     // Alarm variables
     [Header("Alarm Variables")]
-    [ReadOnly, SerializeField] private bool alarmSounded;
-    [ReadOnly, SerializeField] private Vector3 alarmPosition;
+    [ShowOnly, SerializeField] private bool alarmSounded;
+    [ShowOnly, SerializeField] private Vector3 alarmPosition;
     
     // Idle variables
     [Header("Idle Variables")]
     [SerializeField] private float idleTime = 2f;
-    [ReadOnly, SerializeField] private float currentIdleTime;
+    [ShowOnly, SerializeField] private float currentIdleTime;
     
     // Epic Debug Variables
     [Header("Debug Variables")] 
-    [ReadOnly, SerializeField] private string _currentState;
+    [ShowOnly, SerializeField] private string _currentState;
     
     // State Machine States
     private StateMachine.State _patrol;
