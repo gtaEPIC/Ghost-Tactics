@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 8480424719626774453}
   - component: {fileID: 2667475175774426670}
   - component: {fileID: 7664777317735474861}
-  - component: {fileID: 6425383168800219807}
+  - component: {fileID: 7373514048526902361}
+  - component: {fileID: 4470935767955944035}
   - component: {fileID: 8524207584033008776}
   m_Layer: 7
   m_Name: Enemy
@@ -136,7 +137,7 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &6425383168800219807
+--- !u!114 &7373514048526902361
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -145,27 +146,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 1832622842050188082}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d529c6408768fca46b2ad6789f766eed, type: 3}
+  m_Script: {fileID: 11500000, guid: 7bad9c5f20dc4b42994fc8ef546c51b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 7664777317735474861}
-  player: {fileID: 0}
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 8
-  whatIsPlayer:
-    serializedVersion: 2
-    m_Bits: 64
+  closeEnough: 1.5
   walkPoint: {x: 0, y: 0, z: 0}
-  patrolAreaRadius: 10
-  walkPointRange: 5
-  timeBetweenAttacks: 0.5
+  walkPointRange: 15
+  attackCooldown: 1
+  currentCooldown: 0
+  attackRange: 15
+  attackDistance: 10
   projectile: {fileID: 2954925419039250253, guid: 81573faaf481d0a43a9d7a54b5c54275, type: 3}
-  sightRange: 20
-  sightAngle: 140
-  attackRange: 12
-  playerInSightRange: 0
-  playerInAttackRange: 0
+  alarmSounded: 0
+  alarmPosition: {x: 0, y: 0, z: 0}
+  idleTime: 2
+  currentIdleTime: 0
+  distanceToGoal: 0
+--- !u!114 &4470935767955944035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1832622842050188082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4794220e308c48bebce0e890f42027bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bDebug: 1
+  targetTag: Player
+  detectionRate: 1
+  fieldOfView: 140
+  viewDistance: 25
 --- !u!114 &8524207584033008776
 MonoBehaviour:
   m_ObjectHideFlags: 0
