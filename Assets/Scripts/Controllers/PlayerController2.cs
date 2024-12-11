@@ -131,31 +131,6 @@ public class PlayerController2 : MonoBehaviour
     }
     
     
-private void HandleMouseInput()
-{
-    Vector2 _mouseDelta = _mouse * Time.deltaTime;
-    _xRotation -= _mouseDelta.y * mouseSensY; 
-    _yRotation += _mouseDelta.x * mouseSensX; 
-    _xRotation = Mathf.Clamp(_xRotation, -90f, 90f); 
-    
-    Quaternion cameraRotation = Quaternion.Euler(_xRotation, 0f, 0f);
-    _camera.transform.localRotation = Quaternion.Slerp(_camera.transform.localRotation, cameraRotation, _leanSpeed * Time.deltaTime);
-    
-    _controller.transform.rotation = Quaternion.Euler(0f, _yRotation, 0f);
-
-
-    Vector3 targetGunPosition = new Vector3(_currentGun.transform.localPosition.x, ((_camera.transform.localPosition.y -0.5f) - _currentGun.transform.localPosition.y), _camera.transform.localPosition.z);
-    
-    if (_xRotation < 10f) 
-    {
-        float upwardShift = Mathf.Abs(_xRotation / 90f) * 1.3f; 
-        targetGunPosition += Vector3.up * upwardShift; 
-    }
-    
-    _currentGun.transform.localPosition = Vector3.Slerp(_currentGun.transform.localPosition, targetGunPosition, _leanSpeed * Time.deltaTime);
-    
-    AdjustGunRotation(cameraRotation);
-}
 
     private void HandleMouseInput()
     {

@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 4470935767955944035}
   - component: {fileID: 8524207584033008776}
   m_Layer: 7
-  m_Name: Enemy
+  m_Name: Enemy OLD
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 1832622842050188082}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.741861, y: 1.5, z: 12.047315}
+  m_LocalPosition: {x: -12.47, y: 1.31, z: 11.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -161,7 +161,7 @@ MonoBehaviour:
   alarmPosition: {x: 0, y: 0, z: 0}
   idleTime: 2
   currentIdleTime: 0
-  _currentState: 
+  distanceToGoal: 0
 --- !u!114 &4470935767955944035
 MonoBehaviour:
   m_ObjectHideFlags: 0
