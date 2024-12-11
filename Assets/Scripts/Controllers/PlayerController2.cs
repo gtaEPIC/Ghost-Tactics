@@ -122,7 +122,6 @@ public class PlayerController2 : MonoBehaviour
         Cursor.visible = false;
         _speedOld = _speed;
     }
-<<<<<<< Updated upstream
     
     private void OnDisable()
     {
@@ -157,9 +156,6 @@ private void HandleMouseInput()
     
     AdjustGunRotation(cameraRotation);
 }
-=======
-
->>>>>>> Stashed changes
 
     private void HandleMouseInput()
     {
