@@ -100,6 +100,15 @@ namespace GhostTacticsNS
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""981ce8fa-aef3-4396-af46-c677ff612c04"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -364,6 +373,17 @@ namespace GhostTacticsNS
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""RightLean"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d6f17078-8106-4a99-8621-c92420720f61"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Crouch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -926,6 +946,7 @@ namespace GhostTacticsNS
             m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
             m_Player_LeftLean = m_Player.FindAction("LeftLean", throwIfNotFound: true);
             m_Player_RightLean = m_Player.FindAction("RightLean", throwIfNotFound: true);
+            m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1013,6 +1034,7 @@ namespace GhostTacticsNS
         private readonly InputAction m_Player_Sprint;
         private readonly InputAction m_Player_LeftLean;
         private readonly InputAction m_Player_RightLean;
+        private readonly InputAction m_Player_Crouch;
         public struct PlayerActions
         {
             private @GhostTactics m_Wrapper;
@@ -1025,6 +1047,7 @@ namespace GhostTacticsNS
             public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
             public InputAction @LeftLean => m_Wrapper.m_Player_LeftLean;
             public InputAction @RightLean => m_Wrapper.m_Player_RightLean;
+            public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1058,6 +1081,9 @@ namespace GhostTacticsNS
                 @RightLean.started += instance.OnRightLean;
                 @RightLean.performed += instance.OnRightLean;
                 @RightLean.canceled += instance.OnRightLean;
+                @Crouch.started += instance.OnCrouch;
+                @Crouch.performed += instance.OnCrouch;
+                @Crouch.canceled += instance.OnCrouch;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -1086,6 +1112,9 @@ namespace GhostTacticsNS
                 @RightLean.started -= instance.OnRightLean;
                 @RightLean.performed -= instance.OnRightLean;
                 @RightLean.canceled -= instance.OnRightLean;
+                @Crouch.started -= instance.OnCrouch;
+                @Crouch.performed -= instance.OnCrouch;
+                @Crouch.canceled -= instance.OnCrouch;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1276,6 +1305,7 @@ namespace GhostTacticsNS
             void OnSprint(InputAction.CallbackContext context);
             void OnLeftLean(InputAction.CallbackContext context);
             void OnRightLean(InputAction.CallbackContext context);
+            void OnCrouch(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
